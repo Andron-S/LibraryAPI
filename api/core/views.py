@@ -1,8 +1,8 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 
-from .serializers import BookSerializer, SelectedBookSerializer, BookContentSerializer
-from .models import Book
+from .serializers import BookSerializer, SelectedBookSerializer, BookContentSerializer, UserBookSerializer
+from .models import Book, UserBook
 from rest_framework.response import Response
 
 
@@ -28,7 +28,21 @@ class BookViewSet(viewsets.ModelViewSet):
         serializer = BookContentSerializer(book)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['get'])
+    def get_user_book(self, request):
+        serializer = UserBookSerializer(self.queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class UserBookViewSet(viewsets.ModelViewSet):
+    serializer_class = BookSerializer
+    queryset = Book.objects.all()
+    permission_classes = [permissions.AllowAny]
+
+    @action(detail=True, methods=['get'])
+    def get_user_book(self, request, pk):
+        serializer = self.serializer_class(self.queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 

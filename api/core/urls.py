@@ -9,4 +9,5 @@ urlpatterns = [
     path("books/", BookViewSet.as_view({'get': 'get_books'})),
     path("books/<int:pk>/", BookViewSet.as_view({'get': 'get_selected_book'})),
     path("books/<int:pk>/read/", BookViewSet.as_view({'get': 'get_book_content'})),
+    path("books/my/", BookViewSet.as_view({'get': 'get_user_book'})),
 ]
