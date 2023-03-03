@@ -11,11 +11,17 @@ class Genre(models.Model):
     title = models.CharField(max_length=32, blank=False, null=False, unique=True)
 
 
+class AgeRestrictions(models.Model):
+    restriction = models.CharField(max_length=3, blank=False, null=False, unique=True)
+
+
 class Book(models.Model):
     genre = models.ForeignKey(to=Genre, on_delete=models.SET_NULL, null=True)
     author = models.ForeignKey(to=Author, on_delete=models.SET_NULL, null=True)
+    restriction = models.ForeignKey(to=AgeRestrictions, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=100, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=True)
+    pageNumber = models.IntegerField()
     content = models.TextField(blank=False, null=False)
     image = models.ImageField(blank=False, null=False)
 
