@@ -12,7 +12,21 @@ class BookSerializer(serializers.ModelSerializer):
         fields = ("title", "genre", "author", "image")
 
 
+class SelectedBookSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(slug_field="name", queryset=Author.objects.all())
+    genre = serializers.SlugRelatedField(slug_field="title", queryset=Genre.objects.all())
 
+    class Meta:
+        model = Book
+        fields = ("title", "genre", "author", "pageNumber", "restriction", "image", "description")
+
+
+class BookContentSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(slug_field="name", queryset=Author.objects.all())
+
+    class Meta:
+        model = Book
+        fields = ("title", "author", "content")
 
 
 
