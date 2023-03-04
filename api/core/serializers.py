@@ -9,7 +9,7 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ("title", "genre", "author", "image")
+        fields = ("id", "title", "genre", "author", "image")
 
 
 class SelectedBookSerializer(serializers.ModelSerializer):
@@ -30,14 +30,30 @@ class BookContentSerializer(serializers.ModelSerializer):
 
 
 class UserBookSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(slug_field="name", queryset=Author.objects.all())
-    genre = serializers.SlugRelatedField(slug_field="title", queryset=Genre.objects.all())
-    title = serializers.SlugRelatedField(slug_field="title", queryset=Book.objects.all())
-    image = serializers.SlugRelatedField(slug_field="image", queryset=Book.objects.all())
+    title = serializers.SerializerMethodField()
+    author = serializers.SerializerMethodField()
+    genre = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = UserBook
-        fields = ("genre", "author", "title", "image")
+        fields = ("id", "title", "author", "genre", "image")
+
+    @staticmethod
+    def get_title(user_book):
+        return user_book.book.title
+
+    @staticmethod
+    def get_author(user_book):
+        return user_book.book.author.name
+
+    @staticmethod
+    def get_genre(user_book):
+        return user_book.book.genre.title
+
+    @staticmethod
+    def get_image(user_book):
+        return user_book.book.image.url
 
     def create(self, validated_data):
-        pass
+        return UserBook.objects.create(**validated_data, **self.context)

@@ -44,4 +44,4 @@ class UserBook(models.Model):
     date_added = models.DateField(default=datetime.date.today)
 
     def __str__(self):
-        return self.user.name
+        return self.user.username
